@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		body {
+			width: 100%;
+			max-width: 500px;
+		}
+		.form-cc {
+			margin-bottom: 5px;
+			padding-bottom: 60.7%;
+			position: relative;
+			border: 4px solid #aaa;
+			border-radius: 15px;
+			background-color: #eaeaea;
+		}
+		.form-cc--front::before {
+			content: "";
+			width: 16.2%;
+			height: 21.2%;
+			position: absolute;
+			top: 32.4%;
+			left: 9%;
+			border-radius: 4px;
+			background-color: #aaa;
+		}
+		.form-cc--back::before {
+			content: "";
+			width: 100%;
+			height: 21.8%;
+			position: absolute;
+			top: 9.7%;
+			left: 0;
+			right: 0;
+			background-color: #aaa;
+		}
+		.form-cc--back::after {
+			content: "";
+			width: 58%;
+			height: 20.8%;
+			position: absolute;
+			top: 35.9%;
+			left: 2.8%;
+			background-color: #fff;
+		}
+		.form-cc__label {
+			display: none;
+		}
+		.form-cc__input {
+			width: 100%;
+			border: none;
+			border-radius: 0;
+			background-color: #fff;
+			font-size: 110%;
+			font-family: monospace;
+			text-transform: uppercase;
+		}
+		.form-cc__input:focus {
+		}
+		.form-cc__group {
+			position: absolute;
+			z-index: 2;
+		}
+		.form-cc__group--card-number {
+			top: 58.9%;
+			left: 9%;
+			right: 9%;
+		}
+		.form-cc__group--card-number .form-cc__input {
+			font-size: 170%;
+		}
+		.form-cc__group--card-expires {
+			top: 75.6%;
+			left: 9%;
+		}
+		.form-cc__group--card-expires .form-cc__label {
+			display: inline-block;
+			font-family: sans-serif;
+			text-transform: uppercase;
+			font-size: 50%;
+		}
+		.form-cc__group--card-expires .form-cc__input {
+			display: inline-block;
+			width: 7%;
+			text-align: center;
+		}
+		.form-cc__group--card-name {
+			top: 87.2%;
+			left: 9%;
+			right: 26.3%;
+		}
+		.form-cc__group--card-cvv {
+			width: 10%;
+			text-align: right;
+			top: 35.9%;
+			left: 50%;
+			font-size: 90%;
+		}
+	</style>
+</head>
+<body>
+	
+	<form>
+
+		<div class="form-cc form-cc--front">
+			<div class="form-cc__group form-cc__group--card-number">
+				<label class="form-cc__label" for="card-number">Card number</label>
+				<input class="form-cc__input" type="text" maxlength="19" id="card-number" placeholder="0000 0000 0000 0000">
+			</div>
+			<div class="form-cc__group form-cc__group--card-expires">
+				<label class="form-cc__label" for="card-expire-month">Expires</label>
+				<input class="form-cc__input" type="text" maxlength="2" id="card-expire-month" placeholder="00">
+				<input class="form-cc__input" type="text" maxlength="2" id="card-expire-year" placeholder="00">
+			</div>
+			<div class="form-cc__group form-cc__group--card-name">
+				<label class="form-cc__label" for="card-name">Cardholder name</label>
+				<input class="form-cc__input" type="text" maxlength="50" id="card-name" placeholder="MX JESSIE SAMPLE">
+			</div>
+		</div>
+		<div class="form-cc form-cc--back">
+			<div class="form-cc__group form-cc__group--card-cvv">
+				<label class="form-cc__label" for="card-number">Card number</label>
+				<input class="form-cc__input" type="text" maxlength="3" id="card-number" placeholder="000">
+			</div>
+		</div>
+
+	</form>
+
+	<script>
+		window.onload = function() { resize(); };
+		window.onresize = resize;
+		function resize() {
+			var cardForm = document.querySelectorAll(".form-cc");
+			Array.prototype.forEach.call(cardForm, function(item, i) {			
+				item.style.fontSize = ((item.offsetWidth / 100) * 4) + "px";
+			});
+		}
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+
+<!-- 
+	playing around with the smartcrop.js library to crop images... smartly
+	https://github.com/jwagner/smartcrop.js/ 
+-->
+
+
+	<img src="images/landscape1.jpg" alt="" data-crop-width="800" data-crop-height="300">
+	<img src="images/landscape2.jpg" alt="" data-crop-width="1" data-crop-height="1">
+
+
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="smart-crop.js"></script>
+	<script>
+		var app = {};
+		app.smartCrop = {
+			gather: function() {
+				var self = this;
+				$("[data-crop-width][data-crop-height]").each(function() {
+					var id = "crop-" + Math.random().toString(36).substr(2, 10);
+					$(this).attr("id", id);
+					var imageData = {
+						id: id,
+						image: new Image(),
+						cropWidth: parseInt($(this).attr("data-crop-width")), 
+						cropHeight: parseInt($(this).attr("data-crop-height"))
+					};
+					imageData.image.src = $(this).attr("src");
+					imageData.image.onload = function() {
+						self.analyse(imageData);
+					}
+				});
+				
+			},
+			analyse: function(imageData) {
+				var self = this;
+				console.log(imageData);
+				if(!imageData || !imageData.image) { return; }
+				SmartCrop.crop(imageData.image, {
+					width: imageData.cropWidth,
+					height: imageData.cropHeight,
+					minScale: 1,
+					debug: true
+				}, function(result) {
+					console.log(result);
+					var $image = $("#" + imageData.id);
+					console.log($image);
+
+					var size = {
+						offsetTop: (0 - result.topCrop.y),
+						offsetLeft: (0 - result.topCrop.x),
+						width: result.topCrop.width,
+						height: result.topCrop.height
+					}
+
+					$image.wrap('<div data-crop></div>')
+					$image.css({ "margin-top": size.offsetTop + "px", "margin-left": size.offsetLeft + "px" });
+					$image.parent("[data-crop]").css({"overflow": "hidden", "width": size.width + "px", "height": size.height + "px"});
+				});
+			}
+		}
+	</script>
+
+
+</body>
+</html>
