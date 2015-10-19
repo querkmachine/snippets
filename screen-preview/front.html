@@ -1,0 +1,94 @@
+<!doctype html>
+<!--
+	Demo images from Pixeden.
+	http://www.pixeden.com/psd-mock-up-templates/imac-macbook-psd-flat-mockup
+	http://www.pixeden.com/psd-mock-up-templates/ipad-air-psd-vector-mockup
+	http://www.pixeden.com/psd-mock-up-templates/iphone-6-plus-psd-vector-mockup
+-->
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		.mac-wrapper { width: 200%; transform: scale(0.5); }
+		.ipad-wrapper { max-width: 1188px; transform: scale(0.75); }
+		.iphone-wrapper { max-width: 512px; transform: scale(0.75); }
+		.preview {
+			position: relative;
+			background-size: contain;
+		}
+		.preview__iframe {
+			position: absolute;
+			border: none;
+			border-radius: 4px;
+		}
+		.preview--imac { 
+			padding-bottom: 80.7142857%; 
+			background-image: url("images/imac.png");
+		}
+		.preview--imac .preview__iframe {
+			width: 91.4285714%;
+			height: 63.7168141%;
+			top: 6.3126844%;
+			right: 4.2857143%;
+			bottom: 29.9705015%;
+			left: 4.2857143%;
+		}
+		.preview--macbook {
+			padding-bottom: 57.5118608%;
+			background-image: url("images/macbook.png");
+		}
+		.preview--macbook .preview__iframe {
+			width: 75.8566158%;
+			height: 82.4931256%;
+			top: 5.8661778%;
+			right: 12.0716921%;
+			bottom: 11.6406966%;
+			left: 12.0716921%;
+		}
+		.preview--ipad {
+			padding-bottom: 142.4688562%;
+			background-image: url("images/ipad.png");
+		}
+		.preview--ipad .preview__iframe {
+			width: 86.9762174%;
+			height: 81.3990461%;
+			top: 9.0222576%;
+			right: 6.5118913%;
+			bottom: 9.5786963%;
+			left: 6.5118913%;
+		}
+		.preview--iphone {
+			padding-bottom: 204.3973941%;
+			background-image: url("images/iphone.png");
+		}
+		.preview--iphone .preview__iframe {
+			width: 87.9478828%;
+			height: 76.494024%;
+			top: 11.4342629%;
+			right: 6.0260586%;
+			bottom: 12.0717131%;
+			left: 6.0260586%;
+		}
+	</style>
+</head>
+<body>
+	<div class="mac-wrapper">
+		<div class="preview preview--imac">
+			<iframe class="preview__iframe" src="http://bristolbronies.co.uk/" border="0"></iframe>
+		</div>
+		<div class="preview preview--macbook">
+			<iframe class="preview__iframe" src="http://bristolbronies.co.uk/" border="0"></iframe>
+		</div>
+	</div>
+	<div class="ipad-wrapper">
+		<div class="preview preview--ipad">
+			<iframe class="preview__iframe" src="http://bristolbronies.co.uk/" border="0"></iframe>
+		</div>
+	</div>
+	<div class="iphone-wrapper">
+		<div class="preview preview--iphone">
+			<iframe class="preview__iframe" src="http://bristolbronies.co.uk/" border="0"></iframe>
+		</div>
+	</div>
+</body>
+</html>
