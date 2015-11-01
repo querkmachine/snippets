@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
 </head>
 <body onload="draw()">
+	<!-- Canvas dimensions should be multiples of width / height below. -->
 	<canvas id="canvas" width="1800" height="800"></canvas>
 	<script>
 		var canvas,
@@ -18,11 +19,16 @@
 				ctx = canvas.getContext("2d");
 				console.log("Context", ctx);
 				paintCanvas(0, 0);
+				fillGaps();
 			}
+		}
+		function genOpacity() {
+			return (Math.random() * 66 / 100);
 		}
 		function paintCanvas(x, y) {
 			if((x + width) <= canvas.width) {
-				drawTriangle(x, y, count % 2);
+				var opacity = genOpacity();
+				drawTriangle(x, y, opacity, count % 2);
 				x = x + (width / 2);
 			}
 			else {
@@ -33,7 +39,16 @@
 				paintCanvas(x, y);
 			}
 		}
-		function drawTriangle(x, y, invert) {
+		function fillGaps() {
+			var rows = Math.floor(canvas.height / height);
+			for(var i = 0; i < rows; i++) {
+				 var opacity = genOpacity();
+				 var invert = (i % 2 == 0) ? 1 : 0;
+				 drawTriangle(0 - (width / 2), i * height, opacity, invert);
+				 drawTriangle(canvas.width - (width / 2), i * height, opacity, invert);
+			}
+		}
+		function drawTriangle(x, y, opacity, invert) {
 			console.log("Draw triangle " + count, x, y, width, height);
 			ctx.beginPath();
 			if(invert == true) {
@@ -46,7 +61,6 @@
 				ctx.lineTo(x + width, y);
 				ctx.lineTo(x + (width / 2), y + height);
 			}
-			var opacity = (Math.random() * 66 / 100);
 			ctx.fillStyle = "rgba(0, 0, 0, " + opacity + ")";
 			ctx.fill();
 			count++;
