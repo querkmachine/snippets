@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+</head>
+<body onload="draw()">
+	<canvas id="canvas" width="1800" height="800"></canvas>
+	<script>
+		var canvas,
+		    ctx,
+		    count = 0,
+		    width = 50,
+		    height = 50;
+		function draw() {
+			canvas = document.getElementById("canvas");
+			console.log("Canvas", canvas);
+			if(canvas.getContext) {
+				ctx = canvas.getContext("2d");
+				console.log("Context", ctx);
+				paintCanvas(0, 0);
+			}
+		}
+		function paintCanvas(x, y) {
+			if((x + width) <= canvas.width) {
+				drawTriangle(x, y, count % 2);
+				x = x + (width / 2);
+			}
+			else {
+				x = 0;
+				y = y + height;
+			}
+			if((y + height) <= canvas.height) {
+				paintCanvas(x, y);
+			}
+		}
+		function drawTriangle(x, y, invert) {
+			console.log("Draw triangle " + count, x, y, width, height);
+			ctx.beginPath();
+			if(invert == true) {
+				ctx.moveTo(x, y + height);
+				ctx.lineTo(x + width, y + height);
+				ctx.lineTo(x + (width / 2), y);
+			}
+			else {
+				ctx.moveTo(x, y);
+				ctx.lineTo(x + width, y);
+				ctx.lineTo(x + (width / 2), y + height);
+			}
+			var opacity = (Math.random() * 66 / 100);
+			ctx.fillStyle = "rgba(0, 0, 0, " + opacity + ")";
+			ctx.fill();
+			count++;
+		}
+	</script>
+</body>
+</html>
