@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		.panel1,
+		.panel2 {
+			width: 200px;
+			height: 200px;
+			background-color: #dfdfdf;
+		}
+		.panel1 {
+			background-color: #cdcdcd;
+		}
+	</style>
+</head>
+<body onload="init()">
+	<div class="panel panel1"></div>
+	<div class="panel panel2" id="gesture-target"></div>
+	<script>
+		function init() { 
+			var panels = document.querySelector(".panel");
+			var gestureTarget = document.getElementById("gesture-target");
+			var touchStart, touchMove; 
+			gestureTarget.addEventListener("touchstart", function(e) {
+				touchStart = e.touches[0].pageX;
+				console.log("Start", touchStart);
+			});
+			gestureTarget.addEventListener("touchmove", function(e) {
+				touchMove = e.touches[0].pageX;
+				var movement = touchStart - touchMove;
+				console.log(movement);
+				if(movement < 0) {
+					movement = Math.abs(movement);
+					panels.style.transform = "translateX(" + movement + "px)";
+					panels.style.webkitTransform = "translateX(" + movement + "px)";
+				}
+			});
+			gestureTarget.addEventListener("touchend", function(e) {
+				var movement = touchStart - touchMove;
+				console.log(movement);
+				if(movement > 0) {
+
+				}
+			});
+		}
+	</script>
+</body>
+</html>
