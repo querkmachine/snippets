@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		.fullscreen { width: 100%; background-color: red; }
+		.fullscreen--open { background-color: green; width: 100vw; height: 100vh; }
+		.fullscreen img { width: 100%; height: auto; }
+	</style>
+</head>
+<body>
+	<img src="http://placeponi.es/700/160">
+	<div class="fullscreen" id="fullscreen-me">
+		<img src="http://placeponi.es/400/300">
+		<button id="fullscreen-toggle" type="button">Fullscreen me</button>
+	</div>
+	<img src="http://placeponi.es/300/200">
+	<script>
+		var fullscreen = function() {
+			var self = this;
+			var fullscreenElem = document.getElementById("fullscreen-me");
+			this.init = function() {
+				self.bindControls();
+				self.bindEvents();
+			}
+			this.bindControls = function() {
+				var button = document.getElementById("fullscreen-toggle");
+				button.addEventListener("click", function(e) {
+					self.toggleFullScreen();
+					console.log("Clicked")
+				});
+			}
+			this.bindEvents = function() {
+				document.addEventListener("webkitfullscreenchange", function() {
+					if(
+						document.fullscreenElement || 
+						document.webkitFullscreenElement ||
+						document.mozFullScreenElement ||
+						document.msFullscreenElement
+					) {
+						console.log("NOW FULLSCREEN")
+						fullscreenElem.classList.add("fullscreen--open");
+					}
+					else {
+						console.log("NOW NOT FULLSCREEN")
+						fullscreenElem.classList.remove("fullscreen--open");
+					}
+				});
+			}
+			this.toggleFullScreen = function() {
+				if(!document.fullscreenElement && 
+				   !document.webkitFullscreenElement &&
+				   !document.mozFullScreenElement && 
+				   !document.msFullscreenElement
+				) {
+					if(fullscreenElem.requestFullscreen) {
+						fullscreenElem.requestFullscreen();
+					}
+					else if(fullscreenElem.webkitRequestFullscreen) {
+						fullscreenElem.webkitRequestFullscreen();
+					}
+					else if(fullscreenElem.mozRequestFullScreen) {
+						fullscreenElem.mozRequestFullScreen();
+					}
+					else if(fullscreenElem.msRequestFullscreen) {
+						fullscreenElem.msRequestFullscreen();
+					}
+				}
+				else {
+					if(document.exitFullscreen) {
+						document.exitFullscreen();
+					}
+					else if(document.webkitExitFullscreen) {
+						document.webkitExitFullscreen();
+					}
+					else if(document.mozCancelFullScreen) {
+						document.mozCancelFullScreen();
+					}
+					else if(document.msExitFullscreen) {
+						document.msExitFullscreen();
+					}
+				}
+			}
+		}
+		var fullscreener = new fullscreen;
+		fullscreener.init();
+	</script>
+</body>
+</html>
