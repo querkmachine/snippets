@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		img {
+
+		}
+		x-cover {
+			display: block;
+			height: 100%;
+			position: relative;
+			overflow: hidden;
+		}
+		x-cover img {
+			max-width: none;
+		}
+	</style>
+</head>
+<body>
+
+	<p>Only replicates <code>object-fit: cover</code> and <code>object-fit: 50% 50%</code> at this time. Does not work when browser is resized. Generally very bare bones at the moment. Takes measurements from image parent, not image itself. Needs refactoring. </p>
+
+	<div style="width: 500px; height: 500px;">
+		<img alt="" src="http://placeponi.es/800/600">
+	</div>
+
+	<div style="width: 200px; height: 800px;">
+		<img alt="" src="http://placeponi.es/800/600">
+	</div>
+
+	<div style="width: 800px; height: 200px;">
+		<img alt="" src="http://placeponi.es/800/600">
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+	<script src="jquery.object-fit.js"></script>
+	<script>
+		$(window).on('load', function() {
+			$('img').imageCover({ debug: true });
+		});
+	</script>
+</body>
+</html>
