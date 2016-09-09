@@ -10,7 +10,7 @@
 </head>
 <body>
 
-	<p>Only replicates <code>object-fit: cover</code> and <code>object-fit: 50% 50%</code> at this time. Does not work when browser is resized. Generally very bare bones at the moment. Takes measurements from image parent, not image itself. Needs refactoring. </p>
+	<p>Only replicates <code>object-fit: cover</code> and <code>object-fit: 50% 50%</code> at this time. Only tested with images and HTML5 video. Generally very bare bones at the moment. Takes measurements from image parent, not image itself.</p>
 
 	<div style="width:50%;height:500px;">
 		<img alt="" src="http://placeponi.es/800/600" style="width: 500px; height: 500px">
@@ -20,7 +20,7 @@
 		<img alt="" src="http://placeponi.es/800/600" style="width: 800px; height: 200px;">
 	</div>
 
-	<div style="width:30vw;height:30vh;bottom:0;right:0;position:absolute;">
+	<div style="width:30vw;height:30vh;bottom:0;right:0;position:absolute;overflow:hidden;">
 		<img alt="" src="http://placeponi.es/800/600" style="position:absolute;top:0;left:0;width:100%;height:100%">
 	</div>
 
