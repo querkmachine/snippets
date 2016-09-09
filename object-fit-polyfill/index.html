@@ -4,16 +4,7 @@
 	<meta charset="utf-8">
 	<style>
 		img {
-
-		}
-		x-cover {
-			display: block;
-			height: 100%;
-			position: relative;
-			overflow: hidden;
-		}
-		x-cover img {
-			max-width: none;
+			max-width: 100%;
 		}
 	</style>
 </head>
@@ -21,23 +12,35 @@
 
 	<p>Only replicates <code>object-fit: cover</code> and <code>object-fit: 50% 50%</code> at this time. Does not work when browser is resized. Generally very bare bones at the moment. Takes measurements from image parent, not image itself. Needs refactoring. </p>
 
-	<div style="width: 500px; height: 500px;">
-		<img alt="" src="http://placeponi.es/800/600">
+	<div style="width:50%;height:500px;">
+		<img alt="" src="http://placeponi.es/800/600" style="width: 500px; height: 500px">
+	</div>
+	
+	<div style="max-width:100%;height:200px;">
+		<img alt="" src="http://placeponi.es/800/600" style="width: 800px; height: 200px;">
 	</div>
 
-	<div style="width: 200px; height: 800px;">
-		<img alt="" src="http://placeponi.es/800/600">
+	<div style="width:30vw;height:30vh;bottom:0;right:0;position:absolute;">
+		<img alt="" src="http://placeponi.es/800/600" style="position:absolute;top:0;left:0;width:100%;height:100%">
 	</div>
 
-	<div style="width: 800px; height: 200px;">
-		<img alt="" src="http://placeponi.es/800/600">
-	</div>
+	<!-- <video class="section__video" loop muted style="width:200px;height:500px">
+		<source src="http://kimgur.com/video-mp4" type="video/mp4" />
+		<source src="http://kimgur.com/video-webm" type="video/webm" />
+		<source src="http://kimgur.com/video-ogg" type="video/ogg" />
+	</video> -->
+
+	<!-- <div class="width: 400px; height: 500px; position: relative;">
+		<img alt="" src="http://placeponi.es/800/600" style="position: absolute; top: 0; left: 0; width: 100%; height:">
+	</div> -->
 
 	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 	<script src="jquery.object-fit.js"></script>
 	<script>
 		$(window).on('load', function() {
-			$('img').imageCover({ debug: true });
+			$('img').objectFit({ 
+				debug: true 
+			});
 		});
 	</script>
 </body>
