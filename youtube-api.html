@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		iframe {
+			pointer-events: none;
+		}
+	</style>
+	<title></title>
+</head>
+<body>
+	<div data-youtube="9t8ZQHN39rU"></div>
+	<script src="https://www.youtube.com/iframe_api"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script>
+		const youTubeApi = function() {
+			const self = this;
+			this.init = () => {
+				this.initPlayers();
+			};
+			this.initPlayers = () => {
+				$('[data-youtube]').each((i, video) => {
+					const $video = $(video);
+					const player = new YT.Player($video.get(0), {
+						width: '720',
+						height: '405',
+						videoId: $video.attr('data-youtube'),
+						events: {
+							'onReady': self.playerReady
+							//'onStateChange': 
+						},
+						playerVars: {
+							autoplay: 1,
+							controls: 0,
+							enablejsapi: 1,
+							modestbranding: 1,
+							rel: 0,
+							showinfo: 0,
+							loop: 1
+						}
+					});
+				});
+			};
+			this.init();
+		};
+		$(window).on('load', () => {
+			const YouTube = new youTubeApi();
+		});
+	</script>
+</body>
+</html>
