@@ -1,0 +1,146 @@
+<!doctype html>
+<html class="no-js">
+<head>
+	<meta charset="utf-8">
+	<script>var h = document.querySelector('html');h.classList.remove('no-js');h.classList.add('js');</script>
+	<style>
+		.file-uploader {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			min-height: 120px;
+			position: relative;
+			padding: 20px;
+			border: 1px dashed #ccc;
+			border-radius: 8px;
+			transition: background-color .4s ease;
+		}
+		.file-uploader--hover,
+		.file-uploader--enabled:hover {
+			background-color: #eaeaea;
+		}
+		.file-uploader__icon {
+			width: 90px;
+			height: 90px;
+			margin-right: 20px;
+			fill: #ccc;
+		}
+		.file-uploader__input {
+
+		}
+		.file-uploader--enabled .file-uploader__input {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			opacity: 0;
+			cursor: pointer;
+		}
+		.file-uploader__label {
+			display: none;
+		}
+		.file-uploader--enabled .file-uploader__label {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+
+	<p>NOTE: This does not include any code for actually uploading the files. Using the system file selector (clicking) will set it as the value of the <code>input</code> field as per a normal file input element. The value of the file input cannot be altered programatically however, so an alternate method (asyncronous JS service?) needs to be implemented for the drag-and-drop functionality.</p>
+
+	<div class="file-uploader">
+		<svg class="file-uploader__icon" viewBox="0 0 18 18">
+			<path d="M16.991 7.5c-0.016-0.376-0.050-0.761-0.090-1.154-0.279-2.725-2.453-4.96-5.166-5.298-2.927-0.365-5.494 1.399-6.388 3.952-0.112-0.010-0.225-0.017-0.34-0.017-2.195 0-4.010 1.791-4.010 3.99v0.996c0 0.545 0.475 0.988 1.018 0.988h0.020c0.543 0 0.958-0.467 0.958-1.011v-0.786c-0.115-1.187 0.852-2.186 2.014-2.186 0.058 0 0.115 0.005 0.172 0.010l0.77-0.010c0.452 0.039 0.869-0.159 1.019-0.587l0.216-0.617c0.524-1.499 1.847-2.623 3.426-2.763 2.445-0.217 4.557 1.844 4.394 4.283l-0.003 0.21v2.563h0.010c0.029 0.521 0.486 0.937 1.013 0.937h0.020c0.519 0 0.915-0.426 0.951-0.937h0.007v-2.563l-0.011 0z"></path><path d="M12.691 12.299l-3.022-3.008c-0.187-0.186-0.44-0.291-0.705-0.291s-0.518 0.105-0.705 0.291l-2.952 3c-0.389 0.387-0.389 1.015 0 1.403s1.020 0.388 1.409 0l1.287-1.317v3.633c0 0.547 0.441 0.99 0.985 0.99h0.020c0.544 0 0.985-0.443 0.985-0.99v-3.481l0.129 0.021 1.118 1.114c0.353 0.351 0.918 0.437 1.322 0.146 0.513-0.369 0.555-1.085 0.127-1.511z"></path>
+		</svg>
+		<input class="file-uploader__input" type="file" id="input" multiple>
+		<label class="file-uploader__label" for="input">
+			Click to <strong>choose a file</strong> or drag a file here to upload it.
+		</label>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script>
+		const App = {};
+		App.FileUploader = function($uploader) {
+			const self = this;
+			const htmlClass = 'file-uploader';
+			const $uploaderInput = $uploader.find(`.${htmlClass}__input`);
+			const $uploaderLabel = $uploader.find(`.${htmlClass}__label`);
+			let droppedFiles = false;
+			let allowMultipleFiles = false;
+			let defaultLabel;
+			this.init = () => {
+				if(this.detectSupport()) {
+					defaultLabel = $uploaderLabel.html();
+					allowMultipleFiles = $uploaderInput.attr('multiple');
+					$uploader.addClass(`${htmlClass}--enabled`);
+					this.bindControls();
+				}
+			};
+			this.detectSupport = () => {
+				const div = document.createElement('div');
+				return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+			};
+			this.bindControls = () => {
+				$uploader.on('drag dragstart dragend dragover dragenter dragleave drop', (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+				}).on('dragover dragenter', () => {
+					$uploader.addClass(`${htmlClass}--hover`);
+				}).on('dragleave dragend drop', () => {
+					$uploader.removeClass(`${htmlClass}--hover`);
+				}).on('drop', (e) => {
+					this.validateFiles(e.originalEvent.dataTransfer.files);
+				});
+				$uploaderInput.on('change', (e) => {
+					this.validateFiles(e.originalEvent.srcElement.files);
+				});
+			};
+			this.validateFiles = (files) => {
+				let allowedFiles = [];
+				let formLabel = [];
+				$.each(files, (i, file) => {
+					if(!allowMultipleFiles && i > 0) { return; }
+					// You can do any filesize limiting or mime-type limiting here
+					// file.name - file.size - file.type
+					formLabel.push(file.name);
+					allowedFiles.push(file);
+				});
+				this.updateLabel(formLabel.join(', '));
+				this.uploadFiles(allowedFiles);
+			};
+			this.updateLabel = (filename) => {
+				if(typeof filename != 'undefined' && filename != '') {
+					$uploaderLabel.html(`${filename}<br>${defaultLabel}`);
+					$uploader.addClass(`${htmlClass}--active`);
+				}
+				else {
+					$uploaderLabel.html(defaultLabel);
+					$uploader.removeClass(`${htmlClass}--active`);
+				}
+			};
+			this.uploadFiles = (fileList) => {
+				// Do stuff here!
+				console.log('Upload', fileList);
+				// $.ajax({
+				// 	url: '',
+				// 	method: 'get',
+				// 	data: 
+				// 	dataType: 'json',
+				// 	cacle: false,
+				// 	contentType: false,
+				// 	processData: false,
+				// }).done((data) => {
+				// 	console.log(data);
+				// }).fail(() => {
+				// });
+			};
+			this.init();
+		};
+		$('.file-uploader').each(function() {
+			const FileUploader = new App.FileUploader($(this));
+		})
+	</script>
+</body>
+</html>
