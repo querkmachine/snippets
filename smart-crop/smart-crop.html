@@ -1,0 +1,49 @@
+<!doctype html>
+<html class="no-js">
+<head>
+	<meta charset="utf-8">
+	<script>var h = document.querySelector('html');h.classList.remove('no-js');h.classList.add('js');</script>
+	<style>
+		[data-smartcrop] {
+			object-fit: cover;
+		}
+	</style>
+</head>
+<body>
+
+	<img src="liberty.jpg" alt="" width="300" height="300" data-smartcrop>
+	<img src="memory.jpeg" alt="" width="300" height="300" data-smartcrop>
+	<img src="starry.jpeg" alt="" width="300" height="300" data-smartcrop>
+	<img src="christina.jpg" alt="" width="300" height="300" data-smartcrop>
+	<img src="irises.jpg" alt="" width="300" height="300" data-smartcrop>
+	<img src="vangogh.jpeg" alt="" width="300" height="300" data-smartcrop>
+	<img src="nighthawks.jpg" alt="" width="300" height="300" data-smartcrop>
+	<img src="madonna.jpg" alt="" width="300" height="300" data-smartcrop>
+
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="smartcrop.js"></script>
+	<script>
+		const App = {};
+		App.Images = function(image) {
+			const self = this;
+			const $image = $(image);
+			this.init = () => {
+				smartcrop.crop(image, {
+					width: $image.attr('width'),
+					height: $image.attr('height'),
+					debug: true
+				}, this.drawCrop);
+			};
+			this.drawCrop = (result) => {
+				console.log(result.debugTopCrop);
+				$image.css({'object-position': `top ${0 - result.debugTopCrop.y}px left ${0 - result.debugTopCrop.x}px`});
+			}
+			this.init();
+		};
+		$('[data-smartcrop]').each((i, image) => {
+			const Images = new App.Images(image);
+		});
+	</script>
+
+</body>
+</html>
