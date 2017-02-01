@@ -1,5 +1,5 @@
 /*
- * jQuery Tags Input 2.0.0
+ * jQuery Tags Input 2.1.0
  *
  * Developed by Kimberly Grey
  * https://github.com/querkmachine
@@ -27,6 +27,7 @@
 			formInput: 'tag-input__input',
 			formInputInvalid: 'tag-input__input--invalid'
 		},
+		formPosition: 'below',
 		interactive: true,
 		defaultText: 'add a tag',
 		minChars: 0,
@@ -108,7 +109,12 @@
 				this.$formLabel = $formLabel;
 				this.$formInput = $formInput;
 				$form.append($formLabel).append($formInput);
-				$container.append($form);
+				if(this.settings.formPosition === 'above') {
+					$container.prepend($form);
+				}
+				else {
+					$container.append($form);
+				}
 			}
 
 			// Populate any tags already set
