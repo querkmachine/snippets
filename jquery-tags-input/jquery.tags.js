@@ -202,9 +202,9 @@
 			if(this.settings.debug) console.log('resetAutosize')
 			if(!$(`#${this.id}-tester`).length) {
 				const $formInputDummy = $('<span/>').css({
-					'position': 'fixed',
-					'bottom': '0',
-					'left': '0',
+					'position': 'absolute',
+					'top': '-9999px',
+					'left': '-9999px',
 					'width': 'auto',
 					'font-size': this.$formInput.css('font-size'),
 					'font-family': this.$formInput.css('font-family'),
