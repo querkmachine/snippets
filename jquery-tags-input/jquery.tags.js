@@ -21,7 +21,7 @@
 			tagContainer: 'tag-input__tag-list',
 			tag: 'tag-input__tag',
 			tagLabel: 'tag-input__label',
-			tagDelete: 'tag-input__remove',
+			tagRemove: 'tag-input__remove',
 			form: 'tag-input__form',
 			formLabel: 'screenreader',
 			formInput: 'tag-input__input',
