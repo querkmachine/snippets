@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+	</style>
+</head>
+<body>
+	<input type="text" data-password-strength>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="zxcvbn.js"></script>
+	<script>
+		const App = {};
+		App.UI = {};
+		App.UI.PasswordStrength = function($input) {
+			const self = this;
+			this.init = () => {
+				this.prepareHtml();
+				this.bindControls();
+			};
+			this.bindControls = () => {
+				$input.on('keyup paste', (e) => {
+					const input = $input.val();
+					this.ratePassword(input);
+				});
+			};
+			this.prepareHtml = () => {
+				const $container = $('<div/>', {
+					'class': 'password-strength'
+				});
+				const $state = $('<div/>', {
+					'class': 'password-strength__crack'
+				});
+				$input.wrap($container).after($state);
+			};
+			this.ratePassword = (input) => {
+				const results = zxcvbn(input);
+				let strength = 'Unknown';
+				let output = '';
+				console.log(results);
+				switch(results.score) {
+					case 0: 
+						strength = 'Very weak';
+					break;
+					case 1:
+						strength = 'Weak';
+					break;
+					case 2:
+						strength = 'Moderate';
+					break;
+					case 3: 
+						strength = 'Strong';
+					break;
+					case 4: 
+						strength = 'Very strong';
+					break;
+				}
+				if(strength) { output += `<strong>${strength}</strong>. `; }
+				output += `It would take ${results.crack_times_display.online_no_throttling_10_per_second} to crack this password.`;
+				$input.siblings('.password-strength__crack').html(output);
+			}
+			this.init();
+		}
+		$(document).ready(function() {
+			$('[data-password-strength]').each(function() {
+				App.UI.PasswordStrength($(this));
+			});
+		});
+	</script>
+</body>
+</html>
