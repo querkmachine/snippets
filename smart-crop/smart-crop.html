@@ -41,7 +41,9 @@
 			this.init();
 		};
 		$('[data-smartcrop]').each((i, image) => {
-			const Images = new App.Images(image);
+			setTimeout(() => {
+				const Images = new App.Images(image);
+			}, 1000*(i+1));
 		});
 	</script>
 
