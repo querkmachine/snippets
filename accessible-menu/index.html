@@ -2,20 +2,126 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<style>
-		
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		.navigation {
+
+		}
+		.navigation__userbar {
+
+		}
+		.navigation__menu {
+			display: flex;
+			list-style-type: none;
+		}
+		.navigation__menu > .navigation__item {
+			position: relative;
+		}
+		.navigation__menu > .navigation__item > .navigation__header {
+			display: flex;
+		}
+		.navigation__icon {
+			display: inline-block;
+			width: 14px;
+			height: 8px;
+			background-color: red;
+		}
+		@media only screen and (max-width: 599px) {
+			.menu-open .navigation {
+				display: block;
+				width: 100%;
+				max-width: 380px;
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				left: 0;
+			}
+			.navigation__menu {
+				flex-direction: column;
+			}
+			.navigation__menu > .navigation__item > .navigation__header {
+				justify-content: space-between;
+				align-items: stretch;
+			}
+		}
+		@media only screen and (min-width: 600px) {
+			.navigation__menu {
+				flex-direction: row;
+			}
+			.navigation__menu > .navigation__item {
+				flex: 1 1 1px;
+			}
+			.navigation__menu > .navigation__item > .navigation__header {
+				justify-content: center;
+				align-items: center;
+			}
+			.navigation__menu > .navigation__item--open > .navigation__list {
+				position: absolute;
+				top: 100%;
+				right: 0;
+				left: 0;
+			}
+		}
 	</style>
 </head>
 <body>
 	<a href="#navigation">Open navigation</a>
-	<nav id="navigation" role="navigation">
+	<nav class="navigation" id="navigation" role="navigation">
 		<div class="navigation__userbar">
 			<a class="navigation__close" href="#0">Close navigation</a>
 		</div>
-		<ul class="navigation__list">
+		<ul class="navigation__menu">
+			<li class="navigation__item navigation__item--has-children">
+				<div class="navigation__header">
+					<a class="navigation__link" href="#" id="membership">Membership</a>
+					<button type="button" class="navigation__icon"></button>
+				</div>
+				<ul class="navigation__list" role="group" aria-labelledby="membership">
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">Membership home</a>
+					</li>
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">Students</a>
+					</li>
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">Registration &amp; Conditions of Participation</a>
+					</li>
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">Accreditation</a>
+					</li>
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">Continuing Professional Development (CPD)</a>
+					</li>
+				</ul>
+			</li>
+			<li class="navigation__item navigation__item--has-children">
+				<div class="navigation__header">
+					<span class="navigation__link" role="button" id="events-resources">Events &amp; resources</span>
+					<button type="button" class="navigation__icon"></button>
+				</div>
+				<ul class="navigation__list" role="group" aria-labelledby="events-resources">
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">Events</a>
+					</li>
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">Publications &amp; journals</a>
+					</li>
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">Research opportunities</a>
+					</li>
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">News &amp; blogs</a>
+					</li>
+					<li class="navigation__item">
+						<a class="navigation__link" href="#">Discussion boards</a>
+					</li>
+				</ul>
+			</li>
 			<li class="navigation__item">
-				<a class="navigation__link" href="#">Some text here</a>
-				<span class="navigation__icon"></span>
+				<div class="navigation__header">
+					<a class="navigation__link" href="#">About</a>
+				</div>
 			</li>
 		</ul>
 	</nav>
@@ -24,8 +130,97 @@
 		const App = {};
 		App.UI = {};
 		App.UI.Navigation = function() {
-
+			const self = this;
+			this.init = () => {
+				if(window.matchMedia('(max-width: 599px)').matches) {
+					$('.navigation').addClass('navigation--mobile').attr('aria-hidden', 'true');
+				}
+				else {
+					$('.navigation').removeClass('navigation--mobile').attr('aria-hidden', 'false');
+				}
+				$('.navigation__menu > .navigation__item > .navigation__list').attr('aria-hidden', 'true');
+				this.bindEvents();
+				this.bindControls();
+			};
+			this.bindControls = () => {
+				$(document)
+				.on('mouseover', (e) => {
+					this.closeAllPanels();
+				});
+				$('.navigation__menu')
+				.on('mouseover', (e) => {
+					e.stopPropagation();
+				});
+				$('.navigation__menu > .navigation__item > .navigation__header > .navigation__link')
+				.on('mouseover', (e) => {
+					this.closeAllPanels();
+				});
+				$('.navigation__menu > .navigation__item--has-children > .navigation__header > .navigation__link')
+				.on('mouseover', function(e) {
+					self.openPanel($(this));
+				});
+				$('.navigation__menu > .navigation__item--has-children > .navigation__header > .navigation__icon')
+				.on('keydown', function(e) {
+					if(e.which != 32 && e.which != 13) { return; }
+					e.preventDefault();
+					self.togglePanel($(this));
+				}).on('click', function(e) {
+					e.preventDefault();
+					self.togglePanel($(this));
+				});
+			};
+			this.bindEvents = () => {
+				$(window).on('load hashchange', (e) => {
+					if(window.location.hash == '#navigation') {
+						this.openNavigation();
+						return;
+					}
+					this.closeNavigation();
+				});
+			};
+			this.togglePanel = ($panel) => {
+				if($panel.attr('aria-expanded') === 'true') {
+					this.closePanel($panel);
+					return;
+				}
+				this.openPanel($panel);
+			};
+			this.openPanel = ($panel) => {
+				this.closeAllPanels();
+				const $item = $panel.closest('.navigation__item');
+				$item.find('.navigation__icon').attr('aria-expanded', 'true');
+				$item.find('.navigation__list').attr('aria-hidden', 'false');
+			};
+			this.closePanel = ($panel) => {
+				const $item = $panel.closest('.navigation__item');
+				$item.find('.navigation__icon').attr('aria-expanded', 'false');
+				$item.find('.navigation__list').attr('aria-hidden', 'true');
+			};
+			this.closeAllPanels = ($panel) => {
+				this.closePanel($('.navigation__menu > .navigation__item > .navigation__header > .navigation__icon[aria-expanded="true"]'));
+			};
+			this.toggleNavigation = () => {
+				if($('body').hasClass('menu-open')) {
+					this.closeNavigation();
+					return;
+				}
+				this.openNavigation();
+			};
+			this.openNavigation = () => {
+				$('body').addClass('menu-open');
+				$('.navigation').attr('aria-hidden', 'false');
+				// TRAP AND SET FOCUS HERE
+			};
+			this.closeNavigation = () => {
+				$('body').removeClass('menu-open');
+				$('.navigation').attr('aria-hidden', 'true');
+				// RELEASE FOCUS HERE
+			};
+			this.init();
 		};
+		$(document).ready(function() {
+			App.UI.Navigation();
+		});
 	</script>
 </body>
 </html>
