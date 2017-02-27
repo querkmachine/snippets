@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		
+	</style>
+</head>
+<body onload="App.UI.Spikes()">
+	<svg version="1.1" id="canvas" width="100%" height="100%" viewBox="0 0 1200 360"></svg>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+	<script>
+		const App = {};
+		App.UI = {};
+		App.UI.Spikes = function() {
+			const self = this;
+			const canvasWidth = 1200;
+			const canvasHeight = 360;
+			const canvas = Snap('#canvas');
+			this.init = () => {
+				canvas.attr({
+
+				});
+				for(let i = 0; i < 16; i++) {
+					this.drawSpike();
+				}
+				// for(let i = 0; i < 22; i++) {
+				// 	this.drawTriangle();
+				// }
+			};
+			this.drawSpike = () => {
+				const width = this.randNormalised(100, 360);
+				const bottomXLeft = this.randNormalised(0, canvasWidth - width);
+				const bottomXRight = bottomXLeft + width;
+				const topX = this.randNormalised(bottomXLeft, bottomXRight);
+				const topY = this.randNormalised(canvasHeight * 0.7, canvasHeight * 0.9);
+				const spike = canvas.path(`M${bottomXLeft},${canvasHeight}L${topX},${canvasHeight - topY}L${bottomXRight},${canvasHeight}Z`);
+				spike.attr({
+					fill: `rgba(${this.randColor()}, .2)`
+				});
+			};
+			this.drawTriangle = () => {
+				const x = this.randNormalised(0, canvasWidth);
+				const y = this.randNormalised(0, canvasHeight);
+				const triangle = canvas.path(`M${x},${y}l50,-100l50,100Z`);
+				triangle.attr({
+					fill: `rgba(${this.randColor()}, .2)`
+				});
+			};
+			this.randColor = () => {
+				const options = ['88,50,171', '244,67,54', '63,81,181', '0,150,136', '255,152,0'];
+				return options[this.randNormalised(0, options.length - 1)];
+			};
+			this.randNormalised = (min, max) => {
+				return Math.floor(Math.random() * (max - min + 1)) + min;
+			};
+			this.init();
+		}
+	</script>
+</body>
+</html>
